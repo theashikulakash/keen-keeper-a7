@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
 const getTimelineIcon = (type) => {
@@ -9,26 +9,58 @@ const getTimelineIcon = (type) => {
 };
 
 const Timeline = ({ friendsData = [], loading = false }) => {
-  if (loading) return <LoadingSpinner message="Loading timeline..." />;
   const [filter, setFilter] = useState('All');
+  const [activityCounts, setActivityCounts] = useState({ Call: 0, Text: 0, Video: 0 });
+  const [timelineData, setTimelineData] = useState([]);
 
-  const timelineData = friendsData
-    .flatMap((friend) => (friend.interactions || []).map((item) => ({
-      ...item,
-      person: item.person || friend.name,
-      icon: item.icon || getTimelineIcon(item.type),
-    })))
-    .filter((item) => ['Text', 'Call', 'Video'].includes(item.type))
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  useEffect(() => {
+    const counts = { Call: 0, Text: 0, Video: 0 };
+    friendsData.forEach((friend) => {
+      (friend.interactions || []).forEach((item) => {
+        if (!['Call', 'Text', 'Video'].includes(item.type)) return;
+        counts[item.type] += 1;
+      });
+    });
+    setActivityCounts(counts);
+
+    const data = friendsData
+      .flatMap((friend) => (friend.interactions || []).map((item) => ({
+        ...item,
+        person: item.person || friend.name,
+        icon: item.icon || getTimelineIcon(item.type),
+      })))
+      .filter((item) => ['Text', 'Call', 'Video'].includes(item.type))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+    setTimelineData(data);
+  }, [friendsData]);
 
   const filteredData = filter === 'All'
     ? timelineData
     : timelineData.filter(item => item.type === filter);
 
+  if (loading) return <LoadingSpinner message="Loading timeline..." />;
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white min-h-screen font-sans">
       <h1 className="text-3xl font-bold text-[#1a2b3b] mb-6">Timeline</h1>
 
+      <div className="flex flex-wrap gap-3 mb-6">
+        {['Call', 'Text', 'Video'].map((type) => (
+          <span
+            key={type}
+            className={`px-3 py-2 rounded-full text-xs font-semibold ${
+              type === 'Call'
+                ? 'bg-rose-100 text-rose-700'
+                : type === 'Text'
+                ? 'bg-indigo-100 text-indigo-700'
+                : 'bg-emerald-100 text-emerald-700'
+            }`}
+          >
+            {type}: {activityCounts[type] || 0}
+          </span>
+        ))}
+      </div>
 
       <div className="relative mb-8">
         <select

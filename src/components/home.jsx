@@ -10,23 +10,12 @@ const StatCard = ({ label, value }) => (
 
 const FriendCard = ({ friend, onProfileClick }) => {
   const getStatusStyles = (status) => {
-  switch (status) {
-    case 'Overdue': 
-      return 'bg-red-500 text-white';
-    case 'Almost Due': 
-      return 'bg-orange-400 text-white';
-    case 'On-Track': 
-    case 'Active': 
-    case 'Online':
-      return 'bg-[#244D3F] text-white';
-    case 'In Progress':
-      return 'bg-blue-500 text-white';
-    case 'Inactive':
-      return 'bg-gray-400 text-white';
-    default: 
-      return 'bg-gray-200 text-gray-700';
-  }
-};
+    const s = String(status || '').toLowerCase();
+    if (s.includes('on-track') || s === 'on track') return 'bg-emerald-500 text-white';
+    if (s.includes('almost due')) return 'bg-amber-500 text-white';
+    if (s.includes('overdue')) return 'bg-red-500 text-white';
+    return 'bg-gray-200 text-gray-700';
+  };
 
   return (
     <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center transition-transform hover:scale-[1.02] cursor-pointer">
@@ -54,13 +43,9 @@ export default function Home({ friendsData, onProfileClick, loading = false }) {
   const normalizedData = friendsData || [];
   const totalFriends = normalizedData.length;
   
-  const onTrack = normalizedData.filter(friend => 
-    ['Active', 'Online', 'In Progress'].includes(friend.status)
-  ).length;
-  
-  const needAttention = normalizedData.filter(friend => 
-    ['Overdue', 'Almost Due', 'Inactive'].includes(friend.status)
-  ).length;
+  const onTrack = normalizedData.filter(friend => friend.status === 'On-track').length;
+  const overdueCount = normalizedData.filter(friend => friend.status === 'Overdue').length;
+  const almostDueCount = normalizedData.filter(friend => friend.status === 'Almost Due').length;
   
   const recentInteractions = normalizedData.filter(friend => {
     const timeUnits = friend.lastSeen.split(' ');
@@ -94,8 +79,8 @@ export default function Home({ friendsData, onProfileClick, loading = false }) {
       <section className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mb-24 px-8">
         <StatCard value={totalFriends} label="Total Friends" />
         <StatCard value={onTrack} label="On Track" />
-        <StatCard value={needAttention} label="Need Attention" />
-        <StatCard value={recentInteractions} label="Interactions This Month" />
+        <StatCard value={overdueCount} label="Overdue" />
+        <StatCard value={almostDueCount} label="Almost Due" />
       </section>
 
 

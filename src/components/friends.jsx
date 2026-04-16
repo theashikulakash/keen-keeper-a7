@@ -82,7 +82,15 @@ const FriendProfile = ({ friend, loading = false, onBack, onInteraction }) => {
               <h1 className="text-2xl font-bold text-slate-800">{profile.name}</h1>
               
               <div className="flex justify-center gap-2 my-3">
-                <span className={`badge badge-sm text-white font-bold text-[10px] px-3 ${profile.status === 'Overdue' ? 'badge-error' : 'badge-success'}`}>
+                <span
+                  className={`badge badge-sm text-white font-bold text-[10px] px-3 ${
+                    profile.status === 'Overdue'
+                      ? 'badge-error'
+                      : profile.status === 'Almost Due'
+                        ? 'badge-warning'
+                        : 'badge-success'
+                  }`}
+                >
                   {profile.status.toUpperCase()}
                 </span>
                 <span className="badge badge-ghost badge-sm text-emerald-600 bg-emerald-50 border-none font-bold text-[10px] px-3">{profile.tag}</span>

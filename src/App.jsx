@@ -12,11 +12,24 @@ import ProfilePage from './components/ProfilePage'
 import NotFound from './components/NotFound'
 import FRIENDS_DATA from './data/friends.json'
 
+const normalizeStatus = (status) => {
+  if (['On-track', 'Active', 'Online', 'In Progress'].includes(status)) return 'On-track';
+  if (status === 'Almost Due') return 'Almost Due';
+  if (status === 'Overdue') return 'Overdue';
+  if (status === 'Inactive') return 'Almost Due';
+  return status;
+};
+
+const normalizeData = (data) => data.map((friend) => ({
+  ...friend,
+  status: normalizeStatus(friend.status),
+}));
+
 function App() {
-const [friendsData, setFriendsData] = useState(() => {
-  const saved = localStorage.getItem('friendsData');
-  return saved ? JSON.parse(saved) : FRIENDS_DATA;
-});
+  const [friendsData, setFriendsData] = useState(() => {
+    const saved = localStorage.getItem('keepKeeper_friendsData_v2');
+    return saved ? normalizeData(JSON.parse(saved)) : normalizeData(FRIENDS_DATA);
+  });
   const [loading, setLoading] = useState(false);
   const loadingTimerRef = useRef(null);
   const navigate = useNavigate();
@@ -31,7 +44,7 @@ const [friendsData, setFriendsData] = useState(() => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('friendsData', JSON.stringify(friendsData));
+    localStorage.setItem('keepKeeper_friendsData_v2', JSON.stringify(friendsData));
   }, [friendsData]);
 
   const showLoading = () => {
@@ -83,7 +96,7 @@ const [friendsData, setFriendsData] = useState(() => {
         return {
           ...friend,
           lastSeen: 'Just now',
-          status: type === 'Video' ? 'Online' : 'Active',
+          status: 'On-track',
           interactions,
         };
       })
