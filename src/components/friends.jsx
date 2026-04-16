@@ -34,8 +34,9 @@ const FriendProfile = ({ friend, loading = false, onBack, onInteraction }) => {
     status: friend.status,
     tag: friend.tags?.[0] ?? 'FRIEND',
     note: friend.note || 'A loyal contact in your network.',
+    email: friend.email || 'No email provided',
     preferred: friend.preferred || 'message',
-    daysSince: computeDaysSince(friend.lastSeen),
+    lastSeen: friend.lastSeen || 'Unknown',
     goal: friend.goal ?? 30,
     nextDue: friend.nextDue ?? 'TBD',
     img: friend.img,
@@ -45,8 +46,9 @@ const FriendProfile = ({ friend, loading = false, onBack, onInteraction }) => {
     status: "Overdue",
     tag: "FAMILY",
     note: "Former colleague, great mentor",
+    email: "emma.w@example.com",
     preferred: "email",
-    daysSince: 62,
+    lastSeen: "2m ago",
     goal: 30,
     nextDue: "Feb 27, 2026",
     img: "https://i.pravatar.cc/150?u=emma",
@@ -96,7 +98,8 @@ const FriendProfile = ({ friend, loading = false, onBack, onInteraction }) => {
                 <span className="badge badge-ghost badge-sm text-emerald-600 bg-emerald-50 border-none font-bold text-[10px] px-3">{profile.tag}</span>
               </div>
               <p className="text-sm italic text-slate-500 mt-4">"{profile.note}"</p>
-              <p className="text-xs text-slate-400 mt-2">Preferred: {profile.preferred}</p>
+              <p className="text-xs text-slate-400 mt-2">Email: <a href={`mailto:${profile.email}`} className="text-[#2D5A4C] hover:underline font-semibold">{profile.email}</a></p>
+              <p className="text-xs text-slate-400 mt-1">Preferred: {profile.preferred}</p>
             </div>
 
 
@@ -119,8 +122,8 @@ const FriendProfile = ({ friend, loading = false, onBack, onInteraction }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-6 rounded-xl border border-slate-100 text-center">
-                <div className="text-4xl font-bold text-slate-800">{profile.daysSince}</div>
-                <div className="text-xs text-slate-400 font-medium mt-1">Days Since Contact</div>
+                <div className="text-3xl font-bold text-slate-800">{profile.lastSeen}</div>
+                <div className="text-xs text-slate-400 font-medium mt-1">Last Seen</div>
               </div>
               <div className="bg-white p-6 rounded-xl border border-slate-100 text-center">
                 <div className="text-4xl font-bold text-slate-800">{profile.goal}</div>

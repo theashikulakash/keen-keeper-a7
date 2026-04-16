@@ -26,10 +26,7 @@ const normalizeData = (data) => data.map((friend) => ({
 }));
 
 function App() {
-  const [friendsData, setFriendsData] = useState(() => {
-    const saved = localStorage.getItem('keepKeeper_friendsData_v2');
-    return saved ? normalizeData(JSON.parse(saved)) : normalizeData(FRIENDS_DATA);
-  });
+  const [friendsData, setFriendsData] = useState(() => normalizeData(FRIENDS_DATA));
   const [loading, setLoading] = useState(false);
   const loadingTimerRef = useRef(null);
   const navigate = useNavigate();
@@ -43,9 +40,9 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('keepKeeper_friendsData_v2', JSON.stringify(friendsData));
-  }, [friendsData]);
+
+
+
 
   const showLoading = () => {
     setLoading(true);
@@ -56,15 +53,21 @@ function App() {
     }, 450);
   };
 
+
+
   const handleProfileClick = (friend) => {
     showLoading();
     navigate(`/profile/${friend.id}`);
   };
 
+
+
+
   const handleBackToHome = () => {
     showLoading();
     navigate('/');
   };
+
 
   const handleInteraction = (friendId, type) => {
     const now = new Date();
@@ -76,6 +79,8 @@ function App() {
       minute: '2-digit',
       hour12: true,
     });
+
+
 
     setFriendsData((prevData) =>
       prevData.map((friend) => {
@@ -93,6 +98,7 @@ function App() {
           },
         ];
 
+
         return {
           ...friend,
           lastSeen: 'Just now',
@@ -103,12 +109,18 @@ function App() {
     );
   };
 
+
+
+
   const getActiveTab = (pathname) => {
     if (pathname === '/' || pathname.startsWith('/profile/')) return 'home';
     if (pathname === '/timeline') return 'timeline';
     if (pathname === '/stats') return 'stats';
     return 'home';
   };
+
+
+
 
   const activeTab = getActiveTab(location.pathname);
 
@@ -117,6 +129,11 @@ function App() {
     navigate(tab === 'home' ? '/' : `/${tab}`);
   };
 
+
+
+
+
+  
   return (
     <>
       <Navbar
