@@ -1,23 +1,5 @@
 import React from 'react';
-
-const FRIENDS_DATA = [
-  { "id": 1, "name": "Roxcy", "lastSeen": "3d ago", "tags": ["WORK"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=1" },
-  { "id": 2, "name": "Sarah Chen", "lastSeen": "1h ago", "tags": ["PERSONAL"], "status": "Active", "img": "https://i.pravatar.cc/150?u=2" },
-  { "id": 3, "name": "Marcus Thorne", "lastSeen": "5d ago", "tags": ["WORK", "URGENT"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=3" },
-  { "id": 4, "name": "Amina Jallow", "lastSeen": "Just now", "tags": ["FAMILY"], "status": "Online", "img": "https://i.pravatar.cc/150?u=4" },
-  { "id": 5, "name": "Leo Rossi", "lastSeen": "2w ago", "tags": ["OLD SCHOOL"], "status": "Inactive", "img": "https://i.pravatar.cc/150?u=5" },
-  { "id": 6, "name": "Elena Vance", "lastSeen": "4h ago", "tags": ["WORK"], "status": "In Progress", "img": "https://i.pravatar.cc/150?u=6" },
-  { "id": 7, "name": "Jordan Smith", "lastSeen": "1d ago", "tags": ["GYM"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=7" },
-  { "id": 8, "name": "Priya Sharma", "lastSeen": "30m ago", "tags": ["WORK"], "status": "Active", "img": "https://i.pravatar.cc/150?u=8" },
-  { "id": 9, "name": "Kevin Zhang", "lastSeen": "6d ago", "tags": ["PROJECT X"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=9" },
-  { "id": 10, "name": "Sofia Garsia", "lastSeen": "2d ago", "tags": ["PERSONAL"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=10" },
-  { "id": 11, "name": "David Miller", "lastSeen": "1w ago", "tags": ["WORK"], "status": "Inactive", "img": "https://i.pravatar.cc/150?u=11" },
-  { "id": 12, "name": "Chloe Bennett", "lastSeen": "3h ago", "tags": ["TRAVEL"], "status": "Active", "img": "https://i.pravatar.cc/150?u=12" },
-  { "id": 13, "name": "Hassan Ali", "lastSeen": "5m ago", "tags": ["WORK", "TECH"], "status": "Online", "img": "https://i.pravatar.cc/150?u=13" },
-  { "id": 14, "name": "Maya Patel", "lastSeen": "4d ago", "tags": ["FAMILY"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=14" },
-  { "id": 15, "name": "Lucas Meyer", "lastSeen": "12h ago", "tags": ["FREELANCE"], "status": "In Progress", "img": "https://i.pravatar.cc/150?u=15" },
-  { "id": 16, "name": "Zoe Foster", "lastSeen": "8d ago", "tags": ["DESIGN"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=16" }
-];
+import LoadingSpinner from './LoadingSpinner';
 
 const StatCard = ({ label, value }) => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col items-center min-w-[160px]">
@@ -26,7 +8,7 @@ const StatCard = ({ label, value }) => (
   </div>
 );
 
-const FriendCard = ({ friend }) => {
+const FriendCard = ({ friend, onProfileClick }) => {
   const getStatusStyles = (status) => {
   switch (status) {
     case 'Overdue': 
@@ -49,7 +31,7 @@ const FriendCard = ({ friend }) => {
   return (
     <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center transition-transform hover:scale-[1.02] cursor-pointer">
       <img src={friend.img} alt={friend.name} className="w-20 h-20 rounded-full object-cover mb-4 border-2 border-slate-50" />
-      <h3 className="font-bold text-slate-800 text-lg mb-0.5">{friend.name}</h3>
+      <h3 className="font-bold text-slate-800 text-lg mb-0.5 cursor-pointer hover:text-[#244D3F] hover:underline" onClick={(e) => { e.stopPropagation(); onProfileClick && onProfileClick(friend); }}>{friend.name}</h3>
       <p className="text-[10px] text-gray-400 mb-3">{friend.lastSeen}</p>
       
       <div className="flex gap-1.5 mb-4">
@@ -67,7 +49,32 @@ const FriendCard = ({ friend }) => {
   );
 };
 
-export default function Home() {
+export default function Home({ friendsData, onProfileClick, loading = false }) {
+  if (loading) return <LoadingSpinner message="Loading home..." />;
+  const normalizedData = friendsData || [];
+  const totalFriends = normalizedData.length;
+  
+  const onTrack = normalizedData.filter(friend => 
+    ['Active', 'Online', 'In Progress'].includes(friend.status)
+  ).length;
+  
+  const needAttention = normalizedData.filter(friend => 
+    ['Overdue', 'Almost Due', 'Inactive'].includes(friend.status)
+  ).length;
+  
+  const recentInteractions = normalizedData.filter(friend => {
+    const timeUnits = friend.lastSeen.split(' ');
+    const amount = parseInt(timeUnits[0]);
+    const unit = timeUnits[1]?.toLowerCase() || '';
+    
+    if (friend.lastSeen === 'Just now') return true;
+    if (unit.includes('h')) return true;
+    if (unit.includes('m') && amount <= 60) return true;
+    if (unit.includes('d') && amount <= 30) return true;
+    if (unit.includes('w') && amount === 1) return true;
+    return false;
+  }).length;
+
   return (
     <div className="min-h-screen bg-[#F9FAFB] pb-20 font-sans">
       <header className="max-w-6xl mx-auto text-center py-20 px-8">
@@ -83,20 +90,20 @@ export default function Home() {
         </button>
       </header>
 
-      {/* stats grid */}
+
       <section className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mb-24 px-8">
-        <StatCard value="10" label="Total Friends" />
-        <StatCard value="3" label="On Track" />
-        <StatCard value="6" label="Need Attention" />
-        <StatCard value="12" label="Interactions This Month" />
+        <StatCard value={totalFriends} label="Total Friends" />
+        <StatCard value={onTrack} label="On Track" />
+        <StatCard value={needAttention} label="Need Attention" />
+        <StatCard value={recentInteractions} label="Interactions This Month" />
       </section>
 
-      {/* friends fist */}
+
       <main className="max-w-6xl mx-auto px-8">
         <h2 className="text-2xl font-bold text-slate-900 mb-8 ml-2">Your Friends</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {FRIENDS_DATA.map((friend, idx) => (
-            <FriendCard key={idx} friend={friend} />
+          {normalizedData.map((friend, idx) => (
+            <FriendCard key={friend.id || idx} friend={friend} onProfileClick={onProfileClick} />
           ))}
         </div>
       </main>

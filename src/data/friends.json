@@ -1,0 +1,18 @@
+[
+  { "id": 1, "name": "Roxcy", "lastSeen": "3d ago", "tags": ["WORK"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=1" },
+  { "id": 2, "name": "Sarah Chen", "lastSeen": "1h ago", "tags": ["PERSONAL"], "status": "Active", "img": "https://i.pravatar.cc/150?u=2" },
+  { "id": 3, "name": "Marcus Thorne", "lastSeen": "5d ago", "tags": ["WORK", "URGENT"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=3" },
+  { "id": 4, "name": "Amina Jallow", "lastSeen": "Just now", "tags": ["FAMILY"], "status": "Online", "img": "https://i.pravatar.cc/150?u=4" },
+  { "id": 5, "name": "Leo Rossi", "lastSeen": "2w ago", "tags": ["OLD SCHOOL"], "status": "Inactive", "img": "https://i.pravatar.cc/150?u=5" },
+  { "id": 6, "name": "Elena Vance", "lastSeen": "4h ago", "tags": ["WORK"], "status": "In Progress", "img": "https://i.pravatar.cc/150?u=6" },
+  { "id": 7, "name": "Jordan Smith", "lastSeen": "1d ago", "tags": ["GYM"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=7" },
+  { "id": 8, "name": "Priya Sharma", "lastSeen": "30m ago", "tags": ["WORK"], "status": "Active", "img": "https://i.pravatar.cc/150?u=8" },
+  { "id": 9, "name": "Kevin Zhang", "lastSeen": "6d ago", "tags": ["PROJECT X"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=9" },
+  { "id": 10, "name": "Sofia Garsia", "lastSeen": "2d ago", "tags": ["PERSONAL"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=10" },
+  { "id": 11, "name": "David Miller", "lastSeen": "1w ago", "tags": ["WORK"], "status": "Inactive", "img": "https://i.pravatar.cc/150?u=11" },
+  { "id": 12, "name": "Chloe Bennett", "lastSeen": "3h ago", "tags": ["TRAVEL"], "status": "Active", "img": "https://i.pravatar.cc/150?u=12" },
+  { "id": 13, "name": "Hassan Ali", "lastSeen": "5m ago", "tags": ["WORK", "TECH"], "status": "Online", "img": "https://i.pravatar.cc/150?u=13" },
+  { "id": 14, "name": "Maya Patel", "lastSeen": "4d ago", "tags": ["FAMILY"], "status": "Almost Due", "img": "https://i.pravatar.cc/150?u=14" },
+  { "id": 15, "name": "Lucas Meyer", "lastSeen": "12h ago", "tags": ["FREELANCE"], "status": "In Progress", "img": "https://i.pravatar.cc/150?u=15" },
+  { "id": 16, "name": "Zoe Foster", "lastSeen": "8d ago", "tags": ["DESIGN"], "status": "Overdue", "img": "https://i.pravatar.cc/150?u=16" }
+]
