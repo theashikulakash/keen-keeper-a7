@@ -38,7 +38,7 @@ const Stats = ({ friendsData = [], loading = false }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-[#f8fafc] min-h-screen">
-      <h1 className="text-3xl font-bold text-[#1a2b3b] mb-6">Interaction Analytics</h1>
+      <h1 className="text-3xl font-bold text-[#1a2b3b] mb-6">Friendship Analytics</h1>
       
       <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
         <h2 className="text-sm font-semibold text-[#244D3F] mb-4 uppercase tracking-wider">
